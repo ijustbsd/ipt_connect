@@ -553,6 +553,9 @@ def download_certs(request):
 		result = render_to_string('IPT%s/cert_best.html' % params.app_version, {'persons': persons})
 	elif is_team:
 		teams = Team.objects.order_by('-total_points')[:3]
+		for team in teams:
+			participants = Participant.objects.filter(team=team).order_by('total_points')
+			team.participants = ', '.join([x.fullname().replace(' ', u'\u00A0') for x in participants])
 		result = render_to_string('IPT%s/cert_team.html' % params.app_version, {'teams': list(enumerate(teams, 1))})
 	else:
 		participants = Participant.objects.all()
