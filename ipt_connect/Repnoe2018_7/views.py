@@ -377,18 +377,29 @@ def physics_fight_detail(request, pfid):
 
 		# meangrades and summary grades
 		meanroundsgrades = []
-		summary_grades = {round.reporter.team.name: [round.reporter.team.presentation_coefficients()[int(pfid) - 1]] for round in roomrounds}
+		summary_grades = {}
+		for round in roomrounds:
+			try:
+				summary_grades[round.reporter.team.name] = [round.reporter.team.presentation_coefficients()[int(pfid) - 1]]
+			except AttributeError:
+				summary_grades[round.reporter_team.name] = [round.reporter_team.presentation_coefficients()[int(pfid) - 1]]
 		for round in roomrounds:
 			meangrades = []
+			meangrades.append(round.score_reporter)
+			meangrades.append(round.score_opponent)
+			meangrades.append(round.score_reviewer)
 			try:
-				meangrades.append(round.score_reporter)
-				meangrades.append(round.score_opponent)
-				meangrades.append(round.score_reviewer)
 				summary_grades[round.reporter.team.name] += [round.score_reporter * summary_grades[round.reporter.team.name][0]]
+			except AttributeError:
+				summary_grades[round.reporter_team.name] += [round.score_reporter * summary_grades[round.reporter_team.name][0]]
+			try:
 				summary_grades[round.opponent.team.name] += [round.score_opponent * 2.0]
+			except AttributeError:
+				summary_grades[round.opponent_team.name] += [round.score_opponent * 2.0]
+			try:
 				summary_grades[round.reviewer.team.name] += [round.score_reviewer]
-			except:
-				pass
+			except AttributeError:
+				summary_grades[round.reviewer_team.name] += [round.score_reviewer]
 			meanroundsgrades.append(meangrades)
 
 		for team in summary_grades:
