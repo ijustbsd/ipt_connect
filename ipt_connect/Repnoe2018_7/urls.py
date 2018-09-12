@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^$', tournament_overview),
 	url(r'^tournament$', tournament_overview, name='tournament_overview'),
     url(r'^participants$', participants_overview, name='participants_overview'),
-    url(r'^participants/(?P<pk>[0-9]+)/$', participant_detail, name='participant_detail'),
+    url(r'^participants/(?P<pk>[0-9]*)/$', participant_detail, name='participant_detail'),
     url(r'^jurys$', jurys_overview, name='jurys_overview'),
     url(r'^member_for_team$', member_for_team),
     url(r'^jurys/(?P<pk>[0-9]+)/$', jury_detail, name='jury_detail'),
